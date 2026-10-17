@@ -1,34 +1,97 @@
 """Build Supplementary Table S1: a clean, submission-ready list of all distinct
 literature sources behind the 137-row (139 raw, incl. 2 excluded alkaline rows)
 multivalent dataset, with a count of how many data points/which cations each
-source contributed. Also flags low-confidence/secondary-source citations
-(marked per-row during data collection) so a reviewer can see at a glance
-which sources need extra scrutiny.
+source contributed. Also flags low-confidence/secondary-source citations so a
+reviewer can see at a glance which sources need extra scrutiny.
 """
-import re
 import pandas as pd
 
 SRC = r"C:\Polyemr Electrolyter ML project\data\raw\multivalent_literature_extract_merged_v3.csv"
 OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 
-LOW_CONFIDENCE_MARKERS = [
-    "not confirmed", "unconfirmed", "low confidence", "low-confidence",
-    "secondary source", "citation incomplete", "secondhand",
-    "could not be confirmed", "could not be independently confirmed",
-    "not independently confirmed", "could not be identified",
-    "could not be located",
+# Hand-reviewed 2026-10-18: every one of the 84 distinct sources' full citation
+# and notes text was read individually and classified against one fixed rule --
+# LOW CONFIDENCE if the citation's own identity (authors/journal/DOI) could not
+# be confirmed, OR the conductivity value is explicitly sourced secondarily
+# (from a review paper's comparison table, or "cited in" another paper) rather
+# than from the primary paper itself. A source is NOT marked low-confidence
+# merely because some ancillary experimental detail (exact wt%, temperature,
+# salt identity) is unconfirmed while the citation itself is complete and
+# primary -- that is a data-completeness note, not a sourcing-confidence one.
+# An earlier automated version of this function (keyword matching on "not
+# confirmed" etc.) conflated the two and gave different counts on different
+# keyword lists (54/84, then 56/84) -- this explicit, reviewed list replaces
+# that approach. Each key below is verified (by scripts/verify_s1_confidence.py,
+# not checked into this pipeline) to match exactly one of the 84 sources.
+LOW_CONFIDENCE_KEYS = [
+    "A high thermally stable polyacrylonitrile",
+    "Novel hybrid composites NaCF3SO3-PEO-NASICON",
+    "Sodium ion conducting gel polymer electrolyte using poly(vinylidene fluoride hexafluoropropylene)",
+    "Kappa-carrageenan biopolymer electrolyte for a quasi-solid-state zinc-ion battery reinforced with rice paper",
+    "Zn salts incorporated polyurethane/polyacrylonitrile",
+    "Mass production of robust hydrogel electrolytes",
+    "Abdel-Samiea, B.M.",
+    "Bandara, L.R.A.K.",
+    "Chan, C.Y.",
+    "Citation incomplete - found only via a secondary summary",
+    "Citation incomplete - found via researchportal.port.ac.uk",
+    "Citation incomplete: 2020 study of PEO/PVDF/NaClO4",
+    "Cited as 'Diana et al.'",
+    "Dalvi, A. (2020). Novel Na3Zr2Si2PO12",
+    "Dalvi, A. et al. (2019). Electrical transport",
+    "Deng, Y., et al. (2023)",
+    "Diana, M.I., et al. (2022). Substantial ion conduction",
+    "Diana, M.I., Selvasekarapandian",
+    "Dong, H., et al.",
+    "found via a search-engine snippet cluster (same Malaysian",
+    "Found via doaj.org search snippet",
+    "Genier, F.S.",
+    "Huang, J., et al. (2021)",
+    "Jiao, Y., et al.",
+    "Karan, S., Sahu, T.B.",
+    "Koliyoor, N.",
+    "Li, M., et al. (2015)",
+    "Li, R., Zhang, L.",
+    "Likely: Polymer Chemistry, 2020",
+    "Lin, C., Kim, S.-H.",
+    "Liu, D., et al. (2021). Self-Healing",
+    "Liu, Q., et al. (2023)",
+    "Lu, Y., et al. (2020)",
+    "Neha, Dalvi, A.",
+    "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries. Journal",
+    "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries: Forging",
+    "Qi, X., Ma, Q.",
+    "Qiu, H., et al.",
+    "RSC Advances, 2024, vol. 14, Issue 20",
+    "Secondary citation (ref [25]",
+    "Source: par.nsf.gov (NSF Public Access Repository, document ID 10126753)",
+    "Source: par.nsf.gov document",
+    "Source: publikationen.bibliothek.kit.edu",
+    "Source: rsc.org supplementary data file",
+    "Studies on sodium carboxymethyl cellulose-sodium triflate",
+    "Walke, P., et al.",
+    "Wang, Y., et al. (2023). Lean-water",
+    "Wickramaarachchi, W.A.B.P.",
+    "Wu, M., Zhang, Y.",
+    "Zhang, Q., et al. (2021)",
+    "Zhang, W.T., Guo, F.J.",
 ]
 
 
 def is_low_confidence(citation, notes):
-    text = f"{citation} {notes}".lower()
-    return any(m in text for m in LOW_CONFIDENCE_MARKERS)
+    return any(key in citation for key in LOW_CONFIDENCE_KEYS)
 
 
 def main():
     df = pd.read_csv(SRC)
     # exclude the 2 alkaline rows, same as the modeling pipeline
     df = df[~df["salt_or_dopant"].astype(str).str.contains("KOH", case=False, na=False)]
+
+    citations = df["source_citation"].drop_duplicates().tolist()
+    for key in LOW_CONFIDENCE_KEYS:
+        hits = [c for c in citations if key in c]
+        if len(hits) != 1:
+            raise ValueError(f"LOW_CONFIDENCE_KEYS entry {key!r} matched {len(hits)} sources, expected 1")
 
     grouped = []
     for citation, g in df.groupby("source_citation", sort=False):
@@ -51,10 +114,12 @@ def main():
         f"All **{len(grouped)} distinct literature sources** behind the 137-row dataset used in this paper "
         "(2 alkaline/KOH-soak rows, which were excluded from modeling, are also excluded from this source "
         "list). Sources are sorted alphabetically by citation text. `n_rows` = number of data points this "
-        "source contributed. Sources flagged `LOW CONFIDENCE` had incomplete citation details and/or were "
-        "sourced secondarily (e.g. via a review paper's comparison table rather than independently verified "
-        "against primary full text), as noted during data collection. These should be independently "
-        "re-verified before this dataset is used beyond a feasibility demonstration.\n"
+        "source contributed. Each source was individually reviewed and flagged `LOW CONFIDENCE` if its own "
+        "citation (authors, journal, or DOI) could not be confirmed, or if its conductivity value is "
+        "explicitly sourced secondarily (via a review paper's comparison table rather than the primary "
+        "paper itself); a source with a complete, primary citation is not flagged merely because some "
+        "ancillary experimental detail (exact concentration, temperature) is unconfirmed. These should be "
+        "independently re-verified before this dataset is used beyond a feasibility demonstration.\n"
     )
 
     n_low_conf = sum(r["low_confidence"] for r in grouped)
