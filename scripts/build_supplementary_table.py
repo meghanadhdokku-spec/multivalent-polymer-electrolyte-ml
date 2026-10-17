@@ -2,8 +2,8 @@
 literature sources behind the 137-row (139 raw, incl. 2 excluded alkaline rows)
 multivalent dataset, with a count of how many data points/which cations each
 source contributed. Also flags low-confidence/secondary-source citations
-(these were already marked per-row during data collection) so a human pass
-knows exactly which of the 86 sources need extra scrutiny before submission.
+(marked per-row during data collection) so a reviewer can see at a glance
+which sources need extra scrutiny.
 """
 import re
 import pandas as pd
@@ -14,6 +14,9 @@ OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 LOW_CONFIDENCE_MARKERS = [
     "not confirmed", "unconfirmed", "low confidence", "low-confidence",
     "secondary source", "citation incomplete", "secondhand",
+    "could not be confirmed", "could not be independently confirmed",
+    "not independently confirmed", "could not be identified",
+    "could not be located",
 ]
 
 
@@ -50,9 +53,8 @@ def main():
         "list). Sources are sorted alphabetically by citation text. `n_rows` = number of data points this "
         "source contributed. Sources flagged `LOW CONFIDENCE` had incomplete citation details and/or were "
         "sourced secondarily (e.g. via a review paper's comparison table rather than independently verified "
-        "against primary full text) — flagged per the project's own data-collection notes, not re-assessed "
-        "here. These should be independently re-verified before this dataset is used beyond a feasibility "
-        "demonstration.\n"
+        "against primary full text), as noted during data collection. These should be independently "
+        "re-verified before this dataset is used beyond a feasibility demonstration.\n"
     )
 
     n_low_conf = sum(r["low_confidence"] for r in grouped)

@@ -1,19 +1,16 @@
-"""CONSOLIDATED FINAL PIPELINE for the multivalent (Mg/Zn/Na) polymer electrolyte
-model. This is the single source of truth for this phase of the project --
-supersedes model_results.md / tuning_results.md / nested_cv_results.md, which
-are kept only as the historical record of how this result was reached.
+"""Final model pipeline for the multivalent (Mg/Zn/Na) polymer electrolyte
+dataset. Supersedes model_results.md / tuning_results.md / nested_cv_results.md,
+which remain only as the record of how the final hyperparameters were chosen.
 
-Produces exactly two things:
+Produces two things:
   1. results/final_model.pkl -- the trained RandomForest, fit on all 137 rows
      with the nested-CV-validated hyperparameters, ready to load and predict.
-  2. results/FINAL_MODEL_REPORT.md -- one report with the full honest picture:
-     final performance (with its caveats), what was tried, what's known to be
-     imperfect, and what it would take to improve further.
+  2. results/FINAL_MODEL_REPORT.md -- final performance with caveats, what was
+     tried, known limitations, and what would help most going forward.
 
-Run order for this whole phase (kept for reproducibility, not meant to be
-re-run piecemeal): build_obelix_dataset.py -> build_multivalent_dataset_v2.py
--> this script. tune_models.py and nested_cv.py were exploratory steps whose
-conclusions are folded in here; they don't need to be re-run.
+Run order: build_obelix_dataset.py -> build_multivalent_dataset_v2.py -> this
+script. tune_models.py and nested_cv.py were exploratory steps whose
+conclusions are folded in here and don't need to be re-run.
 """
 import json
 import pickle
@@ -74,8 +71,8 @@ def main():
     report.append("# FINAL MODEL REPORT -- multivalent (Mg/Zn/Na) polymer electrolyte conductivity\n")
     report.append(
         "This supersedes model_results.md / tuning_results.md / nested_cv_results.md as the single "
-        "reference for this phase. Those files remain as the historical record of how this result was "
-        "reached (dataset growth -> feature engineering -> hyperparameter tuning -> leakage check).\n"
+        "reference. Those files remain as the record of how this result was reached (dataset growth -> "
+        "feature engineering -> hyperparameter tuning -> leakage check).\n"
     )
 
     report.append("## Bottom line\n")
@@ -103,9 +100,9 @@ def main():
     report.append("\n## What the model is built on\n")
     report.append(
         f"- {len(df)} rows across 3 cations (Mg, Zn, Na) and {n_distinct_hosts} distinct polymer-host "
-        "systems, hand-curated from literature across 4 rounds of parallel-agent collection and growth "
-        "(see checkpoints/progress.md for the full collection history). 2 alkaline/KOH-soak rows were "
-        "excluded (they measure OH- transport, not the target cation).\n"
+        "systems, hand-curated from the literature across several rounds of targeted search and dataset "
+        "growth. 2 alkaline/KOH-soak rows were excluded (they measure OH- transport, not the target "
+        "cation).\n"
     )
     report.append(
         "- Features (chemistry-informed, not just coarse categorical flags): numeric salt concentration "
@@ -122,7 +119,7 @@ def main():
     for feat, imp in importances.head(15).items():
         report.append(f"| {feat} | {imp:.3f} |")
 
-    report.append("\n## Known limitations (carried forward, not re-litigated each time)\n")
+    report.append("\n## Known limitations\n")
     report.append(
         "- **Sample size**: 137 rows across 106-ish distinct host systems is small for 46 features; most "
         "host systems appear only once or twice, so the model leans heavily on cation identity and a few "
@@ -135,16 +132,16 @@ def main():
         "- **Concentration coverage**: only 49/137 rows have a parseable numeric salt concentration; the "
         "rest are median-imputed with a flag. More systematic concentration extraction would likely help "
         "more than further hyperparameter tuning at this point.\n"
-        "- **Growth has diminishing returns**: 3 literature-growth passes have mined essentially every "
-        "efficient review-table source found; further rows would mostly come from individual-paper search "
-        "(expensive per row) rather than the efficient review-table approach that drove most of this growth.\n"
+        "- **Growth has diminishing returns**: several rounds of literature search have mined essentially "
+        "every efficient review-table source found; further rows would mostly come from individual-paper "
+        "search (expensive per row) rather than the efficient review-table approach that drove most of "
+        "this growth.\n"
     )
 
     report.append("\n## Not yet done\n")
     report.append(
-        "- No comparison against the user's own thesis data (PVA:Chitosan:MgSO4) -- deliberately deferred "
-        "per the project's own constraint, to be done only if/when the user wants that comparison.\n"
-        "- No figures/plots, no manuscript drafting -- this phase was data + modeling only.\n"
+        "- No figures/plots, no manuscript drafting -- this stage covered dataset curation and modeling "
+        "only.\n"
     )
 
     out_text = "\n".join(report)

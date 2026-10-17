@@ -1,6 +1,6 @@
 # FINAL MODEL REPORT -- multivalent (Mg/Zn/Na) polymer electrolyte conductivity
 
-This supersedes model_results.md / tuning_results.md / nested_cv_results.md as the single reference for this phase. Those files remain as the historical record of how this result was reached (dataset growth -> feature engineering -> hyperparameter tuning -> leakage check).
+This supersedes model_results.md / tuning_results.md / nested_cv_results.md as the single reference. Those files remain as the record of how this result was reached (dataset growth -> feature engineering -> hyperparameter tuning -> leakage check).
 
 ## Bottom line
 
@@ -13,7 +13,7 @@ This supersedes model_results.md / tuning_results.md / nested_cv_results.md as t
 
 ## What the model is built on
 
-- 137 rows across 3 cations (Mg, Zn, Na) and 106 distinct polymer-host systems, hand-curated from literature across 4 rounds of parallel-agent collection and growth (see checkpoints/progress.md for the full collection history). 2 alkaline/KOH-soak rows were excluded (they measure OH- transport, not the target cation).
+- 137 rows across 3 cations (Mg, Zn, Na) and 106 distinct polymer-host systems, hand-curated from the literature across several rounds of targeted search and dataset growth. 2 alkaline/KOH-soak rows were excluded (they measure OH- transport, not the target cation).
 
 - Features (chemistry-informed, not just coarse categorical flags): numeric salt concentration where parseable (49/137 rows), anion identity (one-hot, rare categories with <=3 members pooled into 'rare_other') + a fluorinated-anion flag, cation physical descriptors (ionic radius, charge, charge density -- currently redundant with the one-hot cation flags at only 3 cations, would matter more with a 4th added later), expanded polymer-host chemistry flags (ether-oxygen backbone, natural biopolymer, fluorinated backbone, hydrogel/aqueous), plasticizer-type flags (ionic liquid / ceramic filler / organic co-solvent), and a secondary-source/low-confidence flag.
 
@@ -38,16 +38,15 @@ This supersedes model_results.md / tuning_results.md / nested_cv_results.md as t
 | anion_triflate | 0.016 |
 | host_has_chitosan | 0.015 |
 
-## Known limitations (carried forward, not re-litigated each time)
+## Known limitations
 
 - **Sample size**: 137 rows across 106-ish distinct host systems is small for 46 features; most host systems appear only once or twice, so the model leans heavily on cation identity and a few coarse host-chemistry flags rather than learning fine structure-property trends.
 - **Measurement heterogeneity**: different papers, different temperature conventions (many 'assumed RT'), different confidence levels (several rows are secondary-sourced from review tables, not independently verified against primary full text) -- this is irreducible noise that caps achievable R2 regardless of model or feature choices.
 - **LOO vs 5-fold discrepancy**: see Bottom Line above -- report both numbers, don't cherry-pick.
 - **Concentration coverage**: only 49/137 rows have a parseable numeric salt concentration; the rest are median-imputed with a flag. More systematic concentration extraction would likely help more than further hyperparameter tuning at this point.
-- **Growth has diminishing returns**: 3 literature-growth passes have mined essentially every efficient review-table source found; further rows would mostly come from individual-paper search (expensive per row) rather than the efficient review-table approach that drove most of this growth.
+- **Growth has diminishing returns**: several rounds of literature search have mined essentially every efficient review-table source found; further rows would mostly come from individual-paper search (expensive per row) rather than the efficient review-table approach that drove most of this growth.
 
 
 ## Not yet done
 
-- No comparison against the user's own thesis data (PVA:Chitosan:MgSO4) -- deliberately deferred per the project's own constraint, to be done only if/when the user wants that comparison.
-- No figures/plots, no manuscript drafting -- this phase was data + modeling only.
+- No figures/plots, no manuscript drafting -- this stage covered dataset curation and modeling only.
