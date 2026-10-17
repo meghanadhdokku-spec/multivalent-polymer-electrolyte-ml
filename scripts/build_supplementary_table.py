@@ -9,20 +9,22 @@ import pandas as pd
 SRC = r"C:\Polyemr Electrolyter ML project\data\raw\multivalent_literature_extract_merged_v3.csv"
 OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 
-# Hand-reviewed 2026-10-18: every one of the 84 distinct sources' full citation
-# and notes text was read individually and classified against one fixed rule --
-# LOW CONFIDENCE if the citation's own identity (authors/journal/DOI) could not
-# be confirmed, OR the conductivity value is explicitly sourced secondarily
-# (from a review paper's comparison table, or "cited in" another paper) rather
-# than from the primary paper itself. A source is NOT marked low-confidence
-# merely because some ancillary experimental detail (exact wt%, temperature,
-# salt identity) is unconfirmed while the citation itself is complete and
-# primary -- that is a data-completeness note, not a sourcing-confidence one.
-# An earlier automated version of this function (keyword matching on "not
-# confirmed" etc.) conflated the two and gave different counts on different
-# keyword lists (54/84, then 56/84) -- this explicit, reviewed list replaces
-# that approach. Each key below is verified (by scripts/verify_s1_confidence.py,
-# not checked into this pipeline) to match exactly one of the 84 sources.
+# Hand-reviewed 2026-10-18 (two passes): every one of the 84 distinct sources'
+# full citation and notes text was read individually and classified against
+# one fixed rule -- LOW CONFIDENCE if (a) the citation's own identity
+# (authors/journal/DOI) could not be confirmed, (b) the conductivity value is
+# explicitly sourced secondarily (from a review paper's comparison table, or
+# "cited in" another paper) rather than from the primary paper itself, or
+# (c) a core identifying/quantitative detail of the system itself -- the
+# conductivity value, the salt identity, or the host polymer identity, not
+# just an ancillary parameter like exact wt% or measurement temperature --
+# is explicitly flagged unconfirmed together with an instruction to verify
+# against the full text before use. A source is NOT marked low-confidence
+# merely because a secondary, non-identifying detail is unconfirmed on an
+# otherwise complete, primary, fully-accessed citation (e.g. an exact molar
+# ratio calculated from a stated mass recipe, or a DOI simply not published
+# by the journal). Each key below is verified to match exactly one of the 84
+# sources by the assertion in main() below.
 LOW_CONFIDENCE_KEYS = [
     "A high thermally stable polyacrylonitrile",
     "Novel hybrid composites NaCF3SO3-PEO-NASICON",
@@ -75,6 +77,19 @@ LOW_CONFIDENCE_KEYS = [
     "Wu, M., Zhang, Y.",
     "Zhang, Q., et al. (2021)",
     "Zhang, W.T., Guo, F.J.",
+    # Second pass: core system-identifying detail (salt/host identity or the
+    # conductivity value itself) explicitly unconfirmed with an instruction
+    # to verify against full text/SI before use -- see rule (c) above.
+    "Dhanush, P.C.",
+    "Hou, Y., et al. (2024)",
+    "Lee, S., Park, S.J.",
+    "Lin, D., Lin, Y.",
+    "Pandey, G.P.",
+    "Sowmiya, S.",
+    "Wu, N., Wang, W.",
+    "Xu, Y., Lan, B",
+    "Xue, Y., Quesnel",
+    "Yu, J., Li, M.",
 ]
 
 
