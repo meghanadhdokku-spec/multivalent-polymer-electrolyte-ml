@@ -5,10 +5,10 @@ This supersedes model_results.md / tuning_results.md / nested_cv_results.md as t
 ## Bottom line
 
 - **Final model: RandomForestRegressor({'n_estimators': 400, 'max_depth': 6, 'min_samples_leaf': 2, 'random_state': 42, 'n_jobs': -1}), trained on 137 literature-mined Mg/Zn/Na polymer-electrolyte data points.**
-- **Validated performance (leave-one-out CV): R2 = 0.457**, vs a mean-predicting dummy baseline R2 = -0.015. MAE = 0.884 log10(S/cm) (i.e. typical prediction is within roughly a factor of 7.7x of the true conductivity).
-- **Caveat carried forward honestly**: a stricter 5-fold CV estimate (computed during hyperparameter selection, see tuning_results.md) gave R2 = 0.264 -- notably lower. The gap is best explained by 5-fold's higher variance at n=137 (holding out ~27 points at once vs 1 for LOO), not by leakage (nested_cv.py's fully unbiased check gave R2=0.459, matching this result, not the 5-fold one). **Report both numbers in the paper**: ~0.46 as the headline, ~0.26 as a deliberately conservative lower bound.
+- **Validated performance (leave-one-out CV): R2 = 0.466**, vs a mean-predicting dummy baseline R2 = -0.015. MAE = 0.873 log10(S/cm) (i.e. typical prediction is within roughly a factor of 7.5x of the true conductivity).
+- **Caveat carried forward honestly**: a stricter 5-fold CV estimate (computed during hyperparameter selection, see tuning_results.md) gave R2 = 0.254 -- notably lower. The gap is best explained by 5-fold's higher variance at n=137 (holding out ~27 points at once vs 1 for LOO), not by leakage (nested_cv.py's fully unbiased check gave R2=0.471, matching this result, not the 5-fold one). **Report both numbers in the paper**: ~0.47 as the headline, ~0.25 as a deliberately conservative lower bound.
 
-- For context, the SAME pipeline on OBELiX (n=599, Li-ion inorganic crystals, a mature benchmark with clean/consistent measurements) reaches R2=0.79. The gap between that and ~0.46 here is the honest measure of how much harder -- and how much more data-starved -- the multivalent/polymer problem is, which is the paper's actual point.
+- For context, the SAME pipeline on OBELiX (n=599, Li-ion inorganic crystals, a mature benchmark with clean/consistent measurements) reaches R2=0.79. The gap between that and ~0.47 here is the honest measure of how much harder -- and how much more data-starved -- the multivalent/polymer problem is, which is the paper's actual point.
 
 
 ## What the model is built on
@@ -22,20 +22,20 @@ This supersedes model_results.md / tuning_results.md / nested_cv_results.md as t
 
 | Feature | Importance |
 |---|---|
-| cation_Zn | 0.236 |
-| host_has_ether_oxygen | 0.091 |
-| plasticizer_none | 0.065 |
+| cation_Zn | 0.237 |
+| host_has_ether_oxygen | 0.090 |
 | temperature_C | 0.063 |
-| host_has_PEO | 0.060 |
+| plasticizer_none | 0.063 |
+| host_has_PEO | 0.059 |
 | value_is_approximate | 0.052 |
-| host_is_hydrogel_aqueous | 0.051 |
-| anion_none_single_ion | 0.045 |
-| is_secondary_source | 0.031 |
-| salt_wt_pct_imputed | 0.026 |
-| temperature_assumed | 0.023 |
-| anion_fluorinated | 0.022 |
+| host_is_hydrogel_aqueous | 0.045 |
+| anion_none_single_ion | 0.044 |
+| is_secondary_source | 0.036 |
+| plasticizer_organic_cosolvent | 0.028 |
+| salt_wt_pct_imputed | 0.027 |
+| temperature_assumed | 0.022 |
+| anion_fluorinated | 0.021 |
 | salt_wt_pct | 0.021 |
-| plasticizer_organic_cosolvent | 0.017 |
 | anion_triflate | 0.016 |
 
 ## Known limitations
