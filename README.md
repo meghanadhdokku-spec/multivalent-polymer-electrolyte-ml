@@ -23,9 +23,9 @@ Requires Python 3.12+ with `pandas`, `numpy`, `scikit-learn`, `xgboost`, and `ma
 
 ## Known data-quality notes (documented, not hidden)
 
-- 75 of 137 rows (55%) are secondary-sourced (read from a review paper's comparison table or a search-engine abstract snippet, not independently verified against primary full text) — flagged per-row via the `notes` column and the `is_secondary_source` feature flag.
+- 70 of 137 rows (51%) are secondary-sourced (read from a review paper's comparison table or a search-engine abstract snippet, not independently verified against primary full text) — flagged per-row via the `notes` column and the `is_secondary_source` feature flag.
 - 2 rows describing alkaline (KOH-soak) systems were excluded from modeling since they measure hydroxide-ion transport, not the labeled cation's transport — see `supplementary_table_S1.md` for details.
-- Salt concentration is directly available for only 49 of 137 rows; the rest are median-imputed with an explicit flag.
+- Salt concentration is directly available for only 51 of 137 rows; the rest are median-imputed with an explicit flag.
 
 ## Citation
 
@@ -33,4 +33,4 @@ If you use this dataset or pipeline, please cite the accompanying paper [citatio
 
 ## License
 
-[Not yet specified — add a license here before making this repository public. MIT is a common choice for the code; CC-BY 4.0 is a common choice for the dataset. This is the author's decision, not something to leave unset for a real public release.]
+MIT (see `LICENSE`). Code and data are both released under this license.

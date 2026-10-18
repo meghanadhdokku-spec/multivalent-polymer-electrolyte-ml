@@ -25,13 +25,19 @@ OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 # ratio calculated from a stated mass recipe, or a DOI simply not published
 # by the journal). Each key below is verified to match exactly one of the 84
 # sources by the assertion in main() below.
+#
+# Third pass, 2026-10-18: using real institutional access (University of
+# Tuebingen), 9 of these were individually re-verified against the actual
+# full text and removed from this list -- their notes/citations in the raw
+# CSV now reflect what was actually confirmed, including corrections where
+# an earlier guess turned out right (e.g. Pandey's salt identity) or a title/
+# author list was wrong (e.g. Koliyoor's initials). Two access-blocked
+# sources (a CAPTCHA-gated journal, and one title-only citation with no
+# traceable authors) remain unresolved and stay flagged.
 LOW_CONFIDENCE_KEYS = [
     "A high thermally stable polyacrylonitrile",
     "Novel hybrid composites NaCF3SO3-PEO-NASICON",
     "Sodium ion conducting gel polymer electrolyte using poly(vinylidene fluoride hexafluoropropylene)",
-    "Kappa-carrageenan biopolymer electrolyte for a quasi-solid-state zinc-ion battery reinforced with rice paper",
-    "Zn salts incorporated polyurethane/polyacrylonitrile",
-    "Mass production of robust hydrogel electrolytes",
     "Abdel-Samiea, B.M.",
     "Bandara, L.R.A.K.",
     "Chan, C.Y.",
@@ -51,7 +57,6 @@ LOW_CONFIDENCE_KEYS = [
     "Huang, J., et al. (2021)",
     "Jiao, Y., et al.",
     "Karan, S., Sahu, T.B.",
-    "Koliyoor, N.",
     "Li, M., et al. (2015)",
     "Li, R., Zhang, L.",
     "Likely: Polymer Chemistry, 2020",
@@ -64,7 +69,6 @@ LOW_CONFIDENCE_KEYS = [
     "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries: Forging",
     "Qi, X., Ma, Q.",
     "Qiu, H., et al.",
-    "RSC Advances, 2024, vol. 14, Issue 20",
     "Secondary citation (ref [25]",
     "Source: par.nsf.gov (NSF Public Access Repository, document ID 10126753)",
     "Source: par.nsf.gov document",
@@ -81,15 +85,10 @@ LOW_CONFIDENCE_KEYS = [
     # conductivity value itself) explicitly unconfirmed with an instruction
     # to verify against full text/SI before use -- see rule (c) above.
     "Dhanush, P.C.",
-    "Hou, Y., et al. (2024)",
     "Lee, S., Park, S.J.",
     "Lin, D., Lin, Y.",
-    "Pandey, G.P.",
     "Sowmiya, S.",
-    "Wu, N., Wang, W.",
-    "Xu, Y., Lan, B",
     "Xue, Y., Quesnel",
-    "Yu, J., Li, M.",
 ]
 
 

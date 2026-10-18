@@ -158,5 +158,6 @@ if __name__ == "__main__":
     fig1_composition()
     fig2_obelix_parity()
     fig3_multivalent_parity()
+    fig4_feature_importance()
     fig5_r2_trend()
     print("\nAll figures written to", FIG_DIR)

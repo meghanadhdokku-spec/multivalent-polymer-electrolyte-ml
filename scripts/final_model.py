@@ -46,6 +46,7 @@ def main():
     X = df[feature_cols]
 
     n_distinct_hosts = df["polymer_host"].str.lower().str.strip().nunique()
+    n_conc_known = int(df["concentration_known"].sum())
 
     # final reported performance: plain LOO with the fixed, already-chosen
     # hyperparameters (this is NOT re-tuned per fold -- that nested estimate
@@ -105,8 +106,8 @@ def main():
         "cation).\n"
     )
     report.append(
-        "- Features (chemistry-informed, not just coarse categorical flags): numeric salt concentration "
-        "where parseable (49/137 rows), anion identity (one-hot, rare categories with <=3 members pooled "
+        f"- Features (chemistry-informed, not just coarse categorical flags): numeric salt concentration "
+        f"where parseable ({n_conc_known}/{len(df)} rows), anion identity (one-hot, rare categories with <=3 members pooled "
         "into 'rare_other') + a fluorinated-anion flag, cation physical descriptors (ionic radius, charge, "
         "charge density -- currently redundant with the one-hot cation flags at only 3 cations, would "
         "matter more with a 4th added later), expanded polymer-host chemistry flags (ether-oxygen "
@@ -129,7 +130,7 @@ def main():
         "not independently verified against primary full text) -- this is irreducible noise that caps "
         "achievable R2 regardless of model or feature choices.\n"
         "- **LOO vs 5-fold discrepancy**: see Bottom Line above -- report both numbers, don't cherry-pick.\n"
-        "- **Concentration coverage**: only 49/137 rows have a parseable numeric salt concentration; the "
+        f"- **Concentration coverage**: only {n_conc_known}/{len(df)} rows have a parseable numeric salt concentration; the "
         "rest are median-imputed with a flag. More systematic concentration extraction would likely help "
         "more than further hyperparameter tuning at this point.\n"
         "- **Growth has diminishing returns**: several rounds of literature search have mined essentially "
