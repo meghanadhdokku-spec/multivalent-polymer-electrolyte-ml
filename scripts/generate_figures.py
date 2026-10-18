@@ -130,7 +130,7 @@ def fig5_r2_trend():
         "v1 coarse\n(n=48)", "v1 coarse\n(n=91)", "v1 coarse\n(n=137)",
         "v2 chem.\nfeatures", "v2 tuned\n(LOO)", "v2 tuned\n(5-fold)",
     ]
-    r2_values = [0.48, 0.40, 0.30, 0.35, 0.45, 0.27]
+    r2_values = [0.48, 0.40, 0.30, 0.35, 0.46, 0.26]
     colors = ["#B0795C"] * 3 + ["#4A7A96"] * 1 + ["#5B8C5A", "#C44E4E"]
 
     fig, ax = plt.subplots(figsize=(7, 4.5))

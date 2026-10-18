@@ -85,16 +85,16 @@ def main():
         f"(i.e. typical prediction is within roughly a factor of {10**rf_metrics['MAE']:.1f}x of the true "
         f"conductivity).\n"
         f"- **Caveat carried forward honestly**: a stricter 5-fold CV estimate (computed during "
-        f"hyperparameter selection, see tuning_results.md) gave R2 = 0.272 -- notably lower. The gap is "
+        f"hyperparameter selection, see tuning_results.md) gave R2 = 0.264 -- notably lower. The gap is "
         f"best explained by 5-fold's higher variance at n={len(df)} (holding out ~27 points at once vs 1 "
-        f"for LOO), not by leakage (nested_cv.py's fully unbiased check gave R2=0.451, matching this "
-        f"result, not the 5-fold one). **Report both numbers in the paper**: ~0.45 as the headline, ~0.27 "
+        f"for LOO), not by leakage (nested_cv.py's fully unbiased check gave R2=0.459, matching this "
+        f"result, not the 5-fold one). **Report both numbers in the paper**: ~0.46 as the headline, ~0.26 "
         f"as a deliberately conservative lower bound.\n"
     )
     report.append(
         f"- For context, the SAME pipeline on OBELiX (n=599, Li-ion inorganic crystals, a mature benchmark "
         f"with clean/consistent measurements) reaches R2={obelix_metrics['XGBoost']['R2']:.2f}. The gap "
-        f"between that and ~0.45 here is the honest measure of how much harder -- and how much more "
+        f"between that and ~0.46 here is the honest measure of how much harder -- and how much more "
         f"data-starved -- the multivalent/polymer problem is, which is the paper's actual point.\n"
     )
 

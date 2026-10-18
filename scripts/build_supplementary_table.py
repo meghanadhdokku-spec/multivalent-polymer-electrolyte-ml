@@ -27,17 +27,18 @@ OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 # sources by the assertion in main() below.
 #
 # Third pass, 2026-10-18: using real institutional access (University of
-# Tuebingen), 9 of these were individually re-verified against the actual
-# full text and removed from this list -- their notes/citations in the raw
-# CSV now reflect what was actually confirmed, including corrections where
-# an earlier guess turned out right (e.g. Pandey's salt identity) or a title/
-# author list was wrong (e.g. Koliyoor's initials). Two access-blocked
-# sources (a CAPTCHA-gated journal, and one title-only citation with no
-# traceable authors) remain unresolved and stay flagged.
+# Tuebingen) and, for two CAPTCHA-blocked publisher pages, legitimate
+# alternate sources (an institutional-repository abstract page, an open CC
+# BY 4.0 Mendeley dataset page), all 11 remaining access-blocked sources
+# were individually re-verified against the actual full text and removed
+# from this list -- their notes/citations in the raw CSV now reflect what
+# was actually confirmed, including corrections where an earlier guess
+# turned out right (e.g. Pandey's salt identity) or a title/author list was
+# wrong or missing entirely (e.g. Koliyoor's initials; the apclab.hcmus.edu.vn
+# source's full citation, recovered from scratch).
 LOW_CONFIDENCE_KEYS = [
     "A high thermally stable polyacrylonitrile",
     "Novel hybrid composites NaCF3SO3-PEO-NASICON",
-    "Sodium ion conducting gel polymer electrolyte using poly(vinylidene fluoride hexafluoropropylene)",
     "Abdel-Samiea, B.M.",
     "Bandara, L.R.A.K.",
     "Chan, C.Y.",
@@ -85,7 +86,6 @@ LOW_CONFIDENCE_KEYS = [
     # conductivity value itself) explicitly unconfirmed with an instruction
     # to verify against full text/SI before use -- see rule (c) above.
     "Dhanush, P.C.",
-    "Lee, S., Park, S.J.",
     "Lin, D., Lin, Y.",
     "Sowmiya, S.",
     "Xue, Y., Quesnel",

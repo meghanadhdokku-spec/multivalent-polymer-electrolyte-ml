@@ -25,7 +25,7 @@ Requires Python 3.12+ with `pandas`, `numpy`, `scikit-learn`, `xgboost`, and `ma
 
 - 70 of 137 rows (51%) are secondary-sourced (read from a review paper's comparison table or a search-engine abstract snippet, not independently verified against primary full text) — flagged per-row via the `notes` column and the `is_secondary_source` feature flag.
 - 2 rows describing alkaline (KOH-soak) systems were excluded from modeling since they measure hydroxide-ion transport, not the labeled cation's transport — see `supplementary_table_S1.md` for details.
-- Salt concentration is directly available for only 51 of 137 rows; the rest are median-imputed with an explicit flag.
+- Salt concentration is directly available for only 52 of 137 rows; the rest are median-imputed with an explicit flag.
 
 ## Citation
 
