@@ -82,7 +82,7 @@ def main():
     report.append(f"| XGBoost | {xgb_metrics['R2']:.3f} | {xgb_metrics['MAE']:.3f} | {xgb_metrics['RMSE']:.3f} |")
     report.append(
         f"\n- Compare: untuned LOO (tune_models.py baseline) ~0.35; hyperparameter-leaked LOO "
-        f"(tuning_results.md) 0.449 (RF); 5-fold-only estimate (also from tuning_results.md) 0.272 (RF); "
+        f"(tuning_results.md) 0.469 (RF); 5-fold-only estimate (also from tuning_results.md) 0.359 (RF); "
         f"nested-CV (this run) {rf_metrics['R2']:.3f} (RF). NOTE: nested-CV came out essentially identical "
         f"to the leaked LOO estimate, not close to the lower 5-fold estimate -- the hyperparameter-selection "
         f"leakage theorized when this script was written did NOT meaningfully bias the earlier result in "

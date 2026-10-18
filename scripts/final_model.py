@@ -28,7 +28,7 @@ RESULTS_DIR = r"C:\Polyemr Electrolyter ML project\results"
 
 # Chosen from tune_models.py's 5-fold grid search, confirmed by nested_cv.py
 # to NOT be an artifact of hyperparameter-selection leakage (see nested_cv_results.md).
-BEST_PARAMS = {"n_estimators": 400, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
+BEST_PARAMS = {"n_estimators": 100, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
 
 
 def metrics(y_true, y_pred):
@@ -85,16 +85,16 @@ def main():
         f"(i.e. typical prediction is within roughly a factor of {10**rf_metrics['MAE']:.1f}x of the true "
         f"conductivity).\n"
         f"- **Caveat carried forward honestly**: a stricter 5-fold CV estimate (computed during "
-        f"hyperparameter selection, see tuning_results.md) gave R2 = 0.376 -- notably lower. The gap is "
+        f"hyperparameter selection, see tuning_results.md) gave R2 = 0.359 -- notably lower. The gap is "
         f"best explained by 5-fold's higher variance at n={len(df)} (holding out ~27 points at once vs 1 "
-        f"for LOO), not by leakage (nested_cv.py's fully unbiased check gave R2=0.478, matching this "
-        f"result, not the 5-fold one). **Report both numbers in the paper**: ~0.49 as the headline, ~0.38 "
+        f"for LOO), not by leakage (nested_cv.py's fully unbiased check gave R2=0.467, matching this "
+        f"result, not the 5-fold one). **Report both numbers in the paper**: ~0.47 as the headline, ~0.36 "
         f"as a deliberately conservative lower bound.\n"
     )
     report.append(
         f"- For context, the SAME pipeline on OBELiX (n=599, Li-ion inorganic crystals, a mature benchmark "
         f"with clean/consistent measurements) reaches R2={obelix_metrics['XGBoost']['R2']:.2f}. The gap "
-        f"between that and ~0.49 here is the honest measure of how much harder -- and how much more "
+        f"between that and ~{rf_metrics['R2']:.2f} here is the honest measure of how much harder -- and how much more "
         f"data-starved -- the multivalent/polymer problem is, which is the paper's actual point.\n"
     )
 

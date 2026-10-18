@@ -84,6 +84,20 @@ OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 # bucket is now a real, confirmed reference rather than a guess or an
 # unresolved gap.
 #
+# Seventh pass, 2026-10-18: for three sources where the publisher page itself
+# was access-blocked, the primary paper's own abstract text was still found
+# independently indexed by two or more unrelated third-party sources (a
+# Figshare mirror, and separate literature-indexing services quoting the
+# abstract directly) -- each confirmed this dataset's conductivity value to
+# 3 significant figures, not just the review table's value. Resolved this way:
+# Li, J. et al. (Electrochimica Acta, 2015) and Zhang, X. et al. (J. Power
+# Sources, 2021, Na-TiS2 battery). One more (Deng, Y. et al., J. Colloid
+# Interface Sci., 2023) resolved the same way via its 16.8 mS/cm value. A
+# fourth (Lu, Y. et al., Energy Storage Materials, 2020) stays flagged -- no
+# open-access copy exists anywhere (confirmed via Unpaywall and Semantic
+# Scholar) and no third-party source was found quoting its specific
+# conductivity value independently of the review table.
+#
 # Rows are only moved to OK here when a specific conductivity value has
 # independent corroboration beyond a single review's own comparison table
 # (a primary abstract, an institutional repository, or multiple agreeing
@@ -104,7 +118,6 @@ LOW_CONFIDENCE_KEYS = [
     "UNRESOLVED (attributed by a review to Wang, Y., et al.",
     "Liu, D., Tang, Z., Luo, L.",
     "Huang, J., et al. (2021). Ultrastable Zinc Anodes",
-    "Deng, Y., Wu, Y., Wang, L.",
     "Liu, Q., Yu, Z., Zhuang, Q.",
     "Lu, Y., Wen, Y., Huang, F.",
     "Citation incomplete - found only via a secondary summary",
@@ -112,8 +125,6 @@ LOW_CONFIDENCE_KEYS = [
     "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries. Journal",
     "Qi, X., Ma, Q., Liu, L.",
     "Genier, F.S., Pathreeker",
-    "Li, J., Zhu, H., Wang, X.",
-    "Zhang, X., Tang, S., Li, X.",
     "Zhang, W.T., Guo, F.J.",
     # Second pass: core system-identifying detail (salt/host identity or the
     # conductivity value itself) explicitly unconfirmed with an instruction

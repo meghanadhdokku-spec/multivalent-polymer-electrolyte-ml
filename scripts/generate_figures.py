@@ -1,4 +1,4 @@
-"""Generate the figures flagged as missing in manuscript/draft_v1.md:
+﻿"""Generate the figures flagged as missing in manuscript/draft_v1.md:
   Fig 1: dataset composition (cation counts, multivalent dataset)
   Fig 2: predicted vs actual log10(conductivity), OBELiX held-out test set
   Fig 3: predicted vs actual log10(conductivity), multivalent dataset (LOO), colored by cation
@@ -28,7 +28,7 @@ plt.rcParams.update({"figure.dpi": 150, "savefig.dpi": 300, "font.size": 11, "ax
 
 def fig1_composition():
     df = pd.read_csv(r"C:\Polyemr Electrolyter ML project\data\processed\multivalent_features_v2.csv")
-    counts = {"Mg²⁺": df["cation_Mg"].sum(), "Zn²⁺": df["cation_Zn"].sum(), "Na⁺": df["cation_Na"].sum()}
+    counts = {"MgÂ²âº": df["cation_Mg"].sum(), "ZnÂ²âº": df["cation_Zn"].sum(), "Naâº": df["cation_Na"].sum()}
     fig, ax = plt.subplots(figsize=(5.5, 4))
     bars = ax.bar(counts.keys(), counts.values(), color=["#5B8C5A", "#4A7A96", "#B0795C"])
     for b in bars:
@@ -60,7 +60,7 @@ def fig2_obelix_parity():
     ax.set_ylim(lims)
     ax.set_xlabel("Actual log$_{10}$(conductivity / S cm$^{-1}$)")
     ax.set_ylabel("Predicted log$_{10}$(conductivity / S cm$^{-1}$)")
-    ax.set_title(f"OBELiX benchmark (Li-ion, n={len(df)})\nXGBoost, held-out test set, R² = {r2:.2f}")
+    ax.set_title(f"OBELiX benchmark (Li-ion, n={len(df)})\nXGBoost, held-out test set, RÂ² = {r2:.2f}")
     ax.legend(loc="upper left", frameon=False)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
@@ -75,7 +75,7 @@ def fig3_multivalent_parity():
     feature_cols = [c for c in df.columns if c not in ("log10_conductivity", "polymer_host", "anion_class")]
     X = df[feature_cols]
 
-    best_params = {"n_estimators": 400, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
+    best_params = {"n_estimators": 100, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
     loo = LeaveOneOut()
     preds = cross_val_predict(RandomForestRegressor(**best_params), X, y, cv=loo)
     r2 = r2_score(y, preds)
@@ -86,7 +86,7 @@ def fig3_multivalent_parity():
         default="#999999",
     )
     fig, ax = plt.subplots(figsize=(6.2, 5.5))
-    for cation, color in [("Mg²⁺", "#5B8C5A"), ("Zn²⁺", "#4A7A96"), ("Na⁺", "#B0795C")]:
+    for cation, color in [("MgÂ²âº", "#5B8C5A"), ("ZnÂ²âº", "#4A7A96"), ("Naâº", "#B0795C")]:
         mask = cation_colors == color
         ax.scatter(y[mask], preds[mask], alpha=0.7, s=30, color=color, edgecolors="none", label=cation)
     lims = [min(y.min(), preds.min()) - 0.5, max(y.max(), preds.max()) + 0.5]
@@ -95,7 +95,7 @@ def fig3_multivalent_parity():
     ax.set_ylim(lims)
     ax.set_xlabel("Actual log$_{10}$(conductivity / S cm$^{-1}$)")
     ax.set_ylabel("Predicted log$_{10}$(conductivity / S cm$^{-1}$)")
-    ax.set_title(f"Multivalent polymer electrolytes (n={len(df)})\nTuned RandomForest, LOO-CV, R² = {r2:.2f}")
+    ax.set_title(f"Multivalent polymer electrolytes (n={len(df)})\nTuned RandomForest, LOO-CV, RÂ² = {r2:.2f}")
     ax.legend(loc="upper left", frameon=False)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
@@ -109,7 +109,7 @@ def fig4_feature_importance():
     y = df["log10_conductivity"].values
     feature_cols = [c for c in df.columns if c not in ("log10_conductivity", "polymer_host", "anion_class")]
     X = df[feature_cols]
-    best_params = {"n_estimators": 400, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
+    best_params = {"n_estimators": 100, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
     model = RandomForestRegressor(**best_params)
     model.fit(X, y)
     importances = pd.Series(model.feature_importances_, index=feature_cols).sort_values(ascending=False).head(15)
@@ -130,7 +130,7 @@ def fig5_r2_trend():
         "v1 coarse\n(n=48)", "v1 coarse\n(n=91)", "v1 coarse\n(n=137)",
         "v2 chem.\nfeatures", "v2 tuned\n(LOO)", "v2 tuned\n(5-fold)",
     ]
-    r2_values = [0.48, 0.40, 0.30, 0.35, 0.46, 0.26]
+    r2_values = [0.48, 0.40, 0.30, 0.35, 0.47, 0.36]
     colors = ["#B0795C"] * 3 + ["#4A7A96"] * 1 + ["#5B8C5A", "#C44E4E"]
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
@@ -138,10 +138,10 @@ def fig5_r2_trend():
     for b, v in zip(bars, r2_values):
         ax.text(b.get_x() + b.get_width() / 2, v + 0.01, f"{v:.2f}", ha="center", fontsize=9)
     ax.axhline(0, color="black", linewidth=0.8)
-    ax.set_ylabel("R² (RandomForest, best of tree models)")
+    ax.set_ylabel("RÂ² (RandomForest, best of tree models)")
     ax.set_title(
-        "R² across dataset growth and modeling stages\n"
-        "(n=48→137 decline reflects less LOO leakage, not a worse model)",
+        "RÂ² across dataset growth and modeling stages\n"
+        "(n=48â†’137 decline reflects less LOO leakage, not a worse model)",
         fontsize=10,
     )
     ax.spines[["top", "right"]].set_visible(False)
