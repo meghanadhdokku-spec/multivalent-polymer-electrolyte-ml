@@ -75,7 +75,7 @@ def fig3_multivalent_parity():
     feature_cols = [c for c in df.columns if c not in ("log10_conductivity", "polymer_host", "anion_class")]
     X = df[feature_cols]
 
-    best_params = {"n_estimators": 400, "max_depth": 6, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
+    best_params = {"n_estimators": 400, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
     loo = LeaveOneOut()
     preds = cross_val_predict(RandomForestRegressor(**best_params), X, y, cv=loo)
     r2 = r2_score(y, preds)
@@ -109,7 +109,7 @@ def fig4_feature_importance():
     y = df["log10_conductivity"].values
     feature_cols = [c for c in df.columns if c not in ("log10_conductivity", "polymer_host", "anion_class")]
     X = df[feature_cols]
-    best_params = {"n_estimators": 400, "max_depth": 6, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
+    best_params = {"n_estimators": 400, "max_depth": None, "min_samples_leaf": 2, "random_state": 42, "n_jobs": -1}
     model = RandomForestRegressor(**best_params)
     model.fit(X, y)
     importances = pd.Series(model.feature_importances_, index=feature_cols).sort_values(ascending=False).head(15)

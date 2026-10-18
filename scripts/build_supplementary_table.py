@@ -42,60 +42,83 @@ OUT = r"C:\Polyemr Electrolyter ML project\manuscript\supplementary_table_S1.md"
 # CrossRef's own API and the publisher's abstract page -- full author list
 # (Singh, Janakiraman, Khalifa, Anandhan, Ghosh, Venimadhav, Biswas),
 # journal, volume/pages, and DOI all confirmed, along with the exact salt
-# identity (Mg(ClO4)2) and conductivity value. This was the only source that
-# remained genuinely unresolved after the third pass; no sources behind an
-# uncrackable CAPTCHA or with an unrecoverable identity remain.
+# identity (Mg(ClO4)2) and conductivity value.
+#
+# Fifth pass, 2026-10-18: tracked down every remaining low-confidence source
+# using real institutional access, same as the fourth pass. Checked CrossRef,
+# Semantic Scholar, and open-access full texts across all 48 remaining
+# flagged sources, plus a direct read of the Park & Schaefer review's own
+# published tables (its 33-row bucket) and reference list. This surfaced
+# real corrections, not just citation gaps:
+#   - Two rows (Huang et al.) were actually two different papers conflated
+#     under one reference by a secondary review; split and re-attributed.
+#   - One citation (Lin, Kim et al., "Matter") could not be found to exist
+#     anywhere and was replaced with the real source (Chen et al., Adv.
+#     Mater. 2022) -- the data values were already correct, only the
+#     citation was wrong.
+#   - One row (Jiao et al.) was a review-table duplication artifact (same
+#     conductivity value attached to two different, only-one-real salt
+#     pairings) -- the fabricated duplicate was dropped.
+#   - One source (Qiu et al., a TiO2-nucleated small-molecule eutectic with
+#     no polymer backbone) was dropped as out of scope for a polymer
+#     electrolyte dataset, the same reasoning as the alkaline-row exclusion.
+#   - Several author-initial errors were fixed (e.g. "Li, M." -> "Li, J.",
+#     "Zhang, Q." -> "Zhang, X.", Dalvi's co-author order).
+#   - One source (Wu et al., 72 mS/cm) had been flagged as a suspicious
+#     outlier; independently confirmed genuine and the flag was lifted.
+#   - One source (Dong et al.) has a confirmed host/capacity mismatch against
+#     the primary paper that could not be resolved -- kept flagged rather
+#     than guessed at.
+#   - One row (Wang et al., EMIMBF4/V6O13) does not actually appear anywhere
+#     in the cited primary paper's full text -- kept flagged as an
+#     unresolved citation error, not force-matched to a replacement.
+# Sixth pass, 2026-10-18: resolved the Park & Schaefer (2020) review's entire
+# 33-row bucket's underlying primary citations by reading the review's own
+# numbered reference list directly (IOPscience, open access -- not guessed
+# via topical matching against an unordered Semantic Scholar dump). This also
+# caught and corrected a wrong guess from an earlier pass (Jeong et al. 2006
+# had been mis-attributed to ref [90]; it is actually ref [87]). These rows
+# stay LOW CONFIDENCE per rule (b) -- the conductivity value is still sourced
+# from the review's own table, not independently re-read from each of the
+# ~26 individual primary papers' own text -- but every citation in the
+# bucket is now a real, confirmed reference rather than a guess or an
+# unresolved gap.
+#
+# Rows are only moved to OK here when a specific conductivity value has
+# independent corroboration beyond a single review's own comparison table
+# (a primary abstract, an institutional repository, or multiple agreeing
+# secondary sources) -- a review-table-only match stays flagged per rule (b)
+# even when the citation itself is now fully confirmed and correct.
 LOW_CONFIDENCE_KEYS = [
-    "Novel hybrid composites NaCF3SO3-PEO-NASICON",
     "Abdel-Samiea, B.M.",
     "Bandara, L.R.A.K.",
-    "Chan, C.Y.",
-    "Citation incomplete - found only via a secondary summary",
-    "Citation incomplete - found via researchportal.port.ac.uk",
-    "Citation incomplete: 2020 study of PEO/PVDF/NaClO4",
-    "Cited as 'Diana et al.'",
-    "Dalvi, A. (2020). Novel Na3Zr2Si2PO12",
-    "Dalvi, A. et al. (2019). Electrical transport",
-    "Deng, Y., et al. (2023)",
-    "Diana, M.I., et al. (2022). Substantial ion conduction",
-    "Diana, M.I., Selvasekarapandian",
-    "Dong, H., et al.",
+    "Wickramaarachchi, W.A.B.P.",
     "found via a search-engine snippet cluster (same Malaysian",
     "Found via doaj.org search snippet",
-    "Genier, F.S.",
-    "Huang, J., et al. (2021)",
-    "Jiao, Y., et al.",
-    "Karan, S., Sahu, T.B.",
-    "Li, M., et al. (2015)",
-    "Li, R., Zhang, L.",
-    "Likely: Polymer Chemistry, 2020",
-    "Lin, C., Kim, S.-H.",
-    "Liu, D., et al. (2021). Self-Healing",
-    "Liu, Q., et al. (2023)",
-    "Lu, Y., et al. (2020)",
-    "Neha, Dalvi, A.",
-    "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries. Journal",
-    "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries: Forging",
-    "Qi, X., Ma, Q.",
-    "Qiu, H., et al.",
-    "Secondary citation (ref [25]",
-    "Source: par.nsf.gov (NSF Public Access Repository, document ID 10126753)",
-    "Source: par.nsf.gov document",
+    "Chan, C.Y., Wang, Z., Li, Y.",
+    "Citation incomplete: 2020 study of PEO/PVDF/NaClO4",
     "Source: publikationen.bibliothek.kit.edu",
-    "Source: rsc.org supplementary data file",
-    "Studies on sodium carboxymethyl cellulose-sodium triflate",
-    "Walke, P., et al.",
-    "Wang, Y., et al. (2023). Lean-water",
-    "Wickramaarachchi, W.A.B.P.",
-    "Wu, M., Zhang, Y.",
-    "Zhang, Q., et al. (2021)",
+    "Source: par.nsf.gov document; full citation could not be independently confirmed",
+    "Wan, F., Hu, K., Liu, R.",
+    "Dong, H., Li, J., Zhao, S.",
+    "UNRESOLVED (attributed by a review to Wang, Y., et al.",
+    "Liu, D., Tang, Z., Luo, L.",
+    "Huang, J., et al. (2021). Ultrastable Zinc Anodes",
+    "Deng, Y., Wu, Y., Wang, L.",
+    "Liu, Q., Yu, Z., Zhuang, Q.",
+    "Lu, Y., Wen, Y., Huang, F.",
+    "Citation incomplete - found only via a secondary summary",
+    "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries: Forging",
+    "Park, B., Schaefer, J.L. (2020). Review-Polymer Electrolytes for Magnesium Batteries. Journal",
+    "Qi, X., Ma, Q., Liu, L.",
+    "Genier, F.S., Pathreeker",
+    "Li, J., Zhu, H., Wang, X.",
+    "Zhang, X., Tang, S., Li, X.",
     "Zhang, W.T., Guo, F.J.",
     # Second pass: core system-identifying detail (salt/host identity or the
     # conductivity value itself) explicitly unconfirmed with an instruction
     # to verify against full text/SI before use -- see rule (c) above.
-    "Dhanush, P.C.",
     "Lin, D., Lin, Y.",
-    "Sowmiya, S.",
     "Xue, Y., Quesnel",
 ]
 
